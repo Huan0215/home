@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>用户管理</title>
+</head>
+<body>
+  <h2>用户管理</h2>
+  <div>
+    <a th:href="@{/logout}">退出</a> |
+    <a th:href="@{/users/add}">新增用户</a>
+  </div>
+
+  <form th:action="@{/users}" method="get">
+    <input type="text" name="username" placeholder="用户名" th:value="${username}"/>
+    <input type="text" name="role" placeholder="角色" th:value="${role}"/>
+    <button type="submit">搜索</button>
+  </form>
+
+  <table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+      <tr><th>ID</th><th>用户名</th><th>角色</th><th>邮箱</th><th>电话</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+      <tr th:each="u : ${pageInfo.list}">
+        <td th:text="${u.id}">1</td>
+        <td th:text="${u.username}">name</td>
+        <td th:text="${u.role}">role</td>
+        <td th:text="${u.email}">email</td>
+        <td th:text="${u.phone}">phone</td>
+        <td>
+          <a th:href="@{'/users/view/' + ${u.id}}">查看</a> |
+          <a th:href="@{'/users/edit/' + ${u.id}}">编辑</a> |
+          <a th:href="@{'/users/delete/' + ${u.id}}"
+             onclick="return confirm('确定删除?')">删除</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <span>第 <span th:text="${pageInfo.pageNum}">1</span> 页，共 <span th:text="${pageInfo.pages}">1</span> 页，记录 <span th:text="${pageInfo.total}">0</span> 条</span>
+  </div>
+
+  <div>
+    <ul style="list-style:none; display:flex; padding:0;">
+      <li th:if="${pageInfo.hasPreviousPage}">
+        <a th:href="@{/users(page=${pageInfo.pageNum - 1}, username=${username}, role=${role})}">上一页</a>
+      </li>
+      <li th:each="i : ${#numbers.sequence(1, pageInfo.pages)}" style="margin:0 5px;">
+        <a th:href="@{/users(page=${i}, username=${username}, role=${role})}"
+           th:text="${i}"
+           th:classappend="${i == pageInfo.pageNum} ? 'current' : ''">1</a>
+      </li>
+      <li th:if="${pageInfo.hasNextPage}">
+        <a th:href="@{/users(page=${pageInfo.pageNum + 1}, username=${username}, role=${role})}">下一页</a>
+      </li>
+    </ul>
+  </div>
+
+</body>
+</html>

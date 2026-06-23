@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.adminsystem.mapper.UserMapper">
+
+  <resultMap id="UserMap" type="com.example.adminsystem.model.User">
+    <id property="id" column="id"/>
+    <result property="username" column="username"/>
+    <result property="password" column="password"/>
+    <result property="role" column="role"/>
+    <result property="email" column="email"/>
+    <result property="phone" column="phone"/>
+    <result property="createdAt" column="created_at"/>
+  </resultMap>
+
+  <select id="selectById" resultMap="UserMap">
+    SELECT * FROM users WHERE id = #{id}
+  </select>
+
+  <select id="selectByUsername" resultMap="UserMap">
+    SELECT * FROM users WHERE username = #{username}
+  </select>
+
+  <select id="selectByUsernameAndPassword" resultMap="UserMap">
+    SELECT * FROM users WHERE username = #{username} AND password = #{password}
+  </select>
+
+  <select id="selectByCondition" resultMap="UserMap">
+    SELECT * FROM users
+    WHERE 1=1
+    <if test="username != null and username != ''">
+      AND username LIKE CONCAT('%', #{username}, '%')
+    </if>
+    <if test="role != null and role != ''">
+      AND role LIKE CONCAT('%', #{role}, '%')
+    </if>
+    ORDER BY id DESC
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO users(username,password,role,email,phone) VALUES
+    (#{username},#{password},#{role},#{email},#{phone})
+  </insert>
+
+  <update id="update">
+    UPDATE users
+    SET username = #{username},
+        password = #{password},
+        role = #{role},
+        email = #{email},
+        phone = #{phone}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById">
+    DELETE FROM users WHERE id = #{id}
+  </delete>
+
+</mapper>

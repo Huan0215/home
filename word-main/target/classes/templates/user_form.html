@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>用户表单</title>
+</head>
+<body>
+  <h2 th:text="${user.id} == null ? '新增用户' : '编辑用户'">表单</h2>
+  <form th:action="${user.id} == null ? @{/users/add} : @{/users/edit}" method="post">
+    <input type="hidden" name="id" th:value="${user.id}"/>
+    <div>
+      <label>用户名：</label><input type="text" name="username" th:value="${user.username}"/>
+    </div>
+    <div>
+      <label>密码：</label><input type="password" name="password" th:value="${user.password}"/>
+    </div>
+    <div>
+      <label>角色：</label><input type="text" name="role" th:value="${user.role}"/>
+    </div>
+    <div>
+      <label>邮箱：</label><input type="text" name="email" th:value="${user.email}"/>
+    </div>
+    <div>
+      <label>电话：</label><input type="text" name="phone" th:value="${user.phone}"/>
+    </div>
+    <div>
+      <button type="submit">保存</button>
+      <a th:href="@{/users}">取消</a>
+    </div>
+  </form>
+</body>
+</html>
